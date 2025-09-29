@@ -225,7 +225,7 @@ const Visualization = () => {
                   onClick={() => setViewMode(id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-all duration-200 ${
                     viewMode === id
-                      ? 'glass-ocean text-white glow-soft'
+                      ? 'glass-ocean text-black glow-soft'
                       : 'text-gray-600'
                   }`}
                 >
