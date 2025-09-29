@@ -195,6 +195,7 @@ For complete documentation, visit our online portal.`;
                   }`}
                 >
                   <Icon className="w-4 h-4" />
+                  <span>{label}</span>
                 </button>
               ))}
             </nav>
