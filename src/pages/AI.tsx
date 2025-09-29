@@ -202,8 +202,8 @@ const AI = () => {
           <div className="glass-ocean text-white p-4 flex items-center space-x-3 border-b border-white/20">
             <Bot className="w-6 h-6" />
             <div>
-              <h2 className="font-semibold">Shark AI</h2>
-              <p className="text-sm opacity-90">Marine Data Specialist</p>
+              <h2 className="font-bold">Shark AI</h2>
+              <p className="text-sm opacity-100">Marine Data Specialist</p>
             </div>
             <div className="ml-auto flex items-center space-x-2">
               <div className="w-2 h-2 bg-green-400 rounded-full"></div>
