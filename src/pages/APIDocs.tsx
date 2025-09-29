@@ -133,8 +133,8 @@ For complete documentation, visit our online portal.`;
       <div className="flex items-center space-x-2 mb-3">
         <span className={`px-3 py-1 rounded text-xs font-semibold ${
           endpoint.method === 'GET' ? 'glass-ocean text-ocean-800' :
-          endpoint.method === 'POST' ? 'glass-coral text-coral-800' :
-          'glass-seaweed text-seaweed-800'
+          endpoint.method === 'POST' ? 'glass-aqua text-aqua-800' :
+          'glass text-deepBlue-800'
         }`}>
           {endpoint.method}
         </span>
@@ -188,10 +188,10 @@ For complete documentation, visit our online portal.`;
                 <button
                   key={id}
                   onClick={() => setActiveTab(id)}
-                  className={`bg-ocean-800 text-white px-6 py-3 rounded-lg glow-hover transition-all duration-200 flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 ${
                     activeTab === id
                       ? 'border-ocean-500 text-ocean-700 glow-soft'
-                      : 'border-transparent text-gray-500'
+                      : 'border-transparent text-gray-500 hover:text-ocean-700 hover:border-ocean-500'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -252,7 +252,7 @@ For complete documentation, visit our online portal.`;
                 <div className="flex items-center justify-center">
                   <button 
                     onClick={handleDownloadManual}
-                    className="bg-ocean-800 text-white px-6 py-3 rounded-lg glow-hover transition-all duration-200 flex items-center space-x-2"
+                    className="glass-ocean text-white px-6 py-3 rounded-lg glow-hover transition-all duration-200 flex items-center space-x-2"
                   >
                     <Download className="w-4 h-4" />
                     <span>Download Complete API Manual</span>
@@ -326,7 +326,7 @@ console.log(datasets);`}</code>
             
             <div>
               <h3 className="text-lg font-medium text-ocean-800 mb-3">Python</h3>
-              <div className="bg-gray-900 rounded-lg p-4 text-green-300 font-mono text-sm">
+              <div className="bg-gray-900 rounded-lg p-4 text-green-400 font-mono text-sm">
                 <code>{`import marine_insights
 
 client = marine_insights.Client(
