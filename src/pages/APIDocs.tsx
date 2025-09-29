@@ -312,7 +312,6 @@ For complete documentation, visit our online portal.`;
             <div>
               <h3 className="text-lg font-medium text-ocean-800 mb-3">JavaScript/Node.js</h3>
               <div className="bg-gray-900 rounded-lg p-4 text-green-400 font-mono text-sm">
-              <div className="bg-gray-900 rounded-lg p-4 text-green-300 font-mono text-sm">
                 <code>{`const marine = require('marine-insights-sdk');
 
 const client = new marine.Client({

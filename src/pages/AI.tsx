@@ -239,7 +239,6 @@ const AI = () => {
                   />
                   <p className={`text-xs mt-1 ${
                     message.type === 'user' ? 'text-blue-100' : 'text-gray-500'
-                    message.type === 'user' ? 'text-gray-600' : 'text-gray-700'
                   }`}>
                     {message.timestamp}
                   </p>
