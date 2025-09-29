@@ -201,7 +201,7 @@ const AI = () => {
         <div className="glass rounded-2xl overflow-hidden glow-soft">
           <div className="glass-ocean text-white p-4 flex items-center space-x-3 border-b border-white/20">
             <Bot className="w-6 h-6" />
-            <div>
+            <div style="background:red;">
               <h2 className="font-bold">Shark AI</h2>
               <p className="text-sm opacity-100">Marine Data Specialist</p>
             </div>
