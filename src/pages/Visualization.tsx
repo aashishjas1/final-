@@ -322,7 +322,7 @@ const Visualization = () => {
                             onClick={() => setActiveLayer(layer)}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                               activeLayer === layer
-                                ? 'glass-ocean text-white glow-soft'
+                                ? 'glass-ocean text-black glow-soft'
                                 : 'glass text-gray-600 hover:glass-ocean hover:text-black glow-hover'
                             }`}
                           >
