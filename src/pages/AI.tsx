@@ -356,7 +356,7 @@ const AI = () => {
               </button>
             </div>
             <p className="text-xs text-gray-500 mt-2">
-              Powered by NVIDIA Llama-3.1-Nemotron-70B-Instruct
+              Powered by Google Gemini 1.5 Flash
             </p>
           </div>
         </div>

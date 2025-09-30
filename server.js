@@ -3,7 +3,7 @@
 // --- Imports ---
 // These are the libraries our server needs to function.
 import express from "express";      // The web server framework
-import fetch from "node-fetch";   // To make requests to other APIs (like NVIDIA's)
+import fetch from "node-fetch";   // To make requests to other APIs (like Gemini's)
 import dotenv from "dotenv";      // To load secret keys from a .env file
 import cors from "cors";          // To allow our frontend to talk to this backend
 
@@ -40,43 +40,63 @@ app.post("/api/ai", async (req, res) => {
   console.log("✅ Received request at /api/ai");
 
   // Securely read the API key from the environment variables.
-  const apiKey = process.env.NVIDIA_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
 
   // First, check if the API key is even available.
   if (!apiKey) {
-    console.error("❌ NVIDIA_API_KEY is not set in the environment. Make sure you have a .env file.");
+    console.error("❌ GEMINI_API_KEY is not set in the environment. Make sure you have a .env file.");
     return res.status(500).json({ error: "Server configuration error: Missing API Key." });
   }
 
   try {
-    // Forward the request to the official NVIDIA API endpoint.
-    const response = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+    // Convert messages to Gemini format
+    const { messages } = req.body;
+    
+    // Combine all messages into a single prompt for Gemini
+    const prompt = messages.map(msg => {
+      if (msg.role === 'system') return msg.content;
+      if (msg.role === 'user') return `User: ${msg.content}`;
+      if (msg.role === 'assistant') return `Assistant: ${msg.content}`;
+      return msg.content;
+    }).join('\n\n');
+
+    // Forward the request to the official Gemini API endpoint.
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: {
-        // Add the secret API key here, keeping it safe on the backend.
-        "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
-      // Pass along the message body from our frontend.
-      body: JSON.stringify(req.body),
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: prompt
+          }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 1,
+          topP: 1,
+          maxOutputTokens: 1024,
+        }
+      }),
     });
 
-    // If NVIDIA's API returns an error...
+    // If Gemini's API returns an error...
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({})); // Try to get detailed error message
-      console.error("❌ NVIDIA API returned an error:", response.status, errorData);
-      return res.status(response.status).json({ error: errorData.error || `NVIDIA API Error: ${response.statusText}` });
+      console.error("❌ Gemini API returned an error:", response.status, errorData);
+      return res.status(response.status).json({ error: errorData.error || `Gemini API Error: ${response.statusText}` });
     }
 
-    // If successful, send the response from NVIDIA back to our frontend.
+    // If successful, send the response from Gemini back to our frontend.
     const data = await response.json();
     res.json(data);
 
   } catch (err) {
     // If the fetch call itself fails (e.g., due to a network error or invalid API key)...
-    console.error("❌ Fatal error when trying to contact NVIDIA API. This is likely a network issue or an invalid API key.");
+    console.error("❌ Fatal error when trying to contact Gemini API. This is likely a network issue or an invalid API key.");
     console.error("Detailed error:", err); // This detailed log is for debugging.
-    res.status(500).json({ error: "Failed to contact NVIDIA API. Check the server terminal for more details." });
+    res.status(500).json({ error: "Failed to contact Gemini API. Check the server terminal for more details." });
   }
 });
 
@@ -86,4 +106,3 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Backend server running on http://0.0.0.0:${PORT}`);
 });
-

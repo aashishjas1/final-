@@ -5,10 +5,12 @@ interface ChatMessage {
   content: string;
 }
 
-interface NVIDIAResponse {
-  choices: Array<{
-    message: {
-      content: string;
+interface GeminiResponse {
+  candidates: Array<{
+    content: {
+      parts: Array<{
+        text: string;
+      }>;
     };
   }>;
 }
@@ -19,7 +21,7 @@ class AIService {
 
   constructor() {
     this.baseUrl = 'https://ocean-main.onrender.com/api';
-    this.model = 'nvidia/llama-3.1-nemotron-70b-instruct';
+    this.model = 'gemini-1.5-flash';
   }
 
   async sendMessage(messages: ChatMessage[]): Promise<string> {
@@ -58,13 +60,13 @@ class AIService {
         throw new Error(`Backend error: ${response.status} - ${errorData.error || 'Unknown error'}`);
       }
 
-      const data: NVIDIAResponse = await response.json();
+      const data: GeminiResponse = await response.json();
 
-      if (!data.choices || data.choices.length === 0) {
-        throw new Error('No response from NVIDIA API');
+      if (!data.candidates || data.candidates.length === 0) {
+        throw new Error('No response from Gemini API');
       }
 
-      return data.choices[0].message.content;
+      return data.candidates[0].content.parts[0].text;
     } catch (error) {
       console.error('Error calling backend AI proxy:', error);
       throw error;
@@ -90,4 +92,3 @@ class AIService {
 
 export const aiService = new AIService();
 export type { ChatMessage };
-
