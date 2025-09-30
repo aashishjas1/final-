@@ -364,7 +364,7 @@ const AI = () => {
               </button>
             </div>
             <p className="text-xs text-gray-500 mt-2">
-              Powered by Google Gemini 1.5 Flash
+              Powered by adil 
             </p>
           </div>
         </div>
