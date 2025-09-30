@@ -13,11 +13,10 @@ import AI from './pages/AI';
 
 function App() {
   const location = useLocation();
-  const isAIPage = location.pathname === '/ai';
 
   return (
-    <div className={isAIPage ? 'min-h-screen' : 'min-h-screen bg-gradient-to-br from-ocean-50 via-sand-50 to-coral-100'}>
-      {!isAIPage && <Header />}
+    <div className="min-h-screen bg-gradient-to-br from-ocean-50 via-sand-50 to-coral-100">
+      <Header />
       <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -30,7 +29,7 @@ function App() {
             <Route path="/ai" element={<AI />} />
           </Routes>
         </main>
-      {!isAIPage && <Footer />}
+      <Footer />
     </div>
   );
 }
