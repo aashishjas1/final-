@@ -3,7 +3,7 @@ import { Send, Bot, User, Database, Fish, Dna, Map, BarChart3 } from 'lucide-rea
 import { aiService, type ChatMessage } from '../services/aiService';
 import ChatHistorySidebar from '../components/ChatHistorySidebar';
 
-// --- Advanced Helper Function to Parse Markdown ---
+// --- Advanced Helper Function to Parse Markdown (No changes needed here) ---
 const parseMarkdown = (text: string) => {
   const lines = text.split('\n');
   const htmlElements = [];
@@ -71,8 +71,8 @@ const parseMarkdown = (text: string) => {
     // Nested Unordered Lists (e.g.,   + Item)
     else if (line.trim().startsWith('+ ')) {
         if (!inList) { // Should be inside a parent list, but handle gracefully
-             htmlElements.push('<ul class="list-inside space-y-1 my-2">');
-             inList = true;
+           htmlElements.push('<ul class="list-inside space-y-1 my-2">');
+           inList = true;
         }
         htmlElements.push(`<li class="ml-4"><ul class="list-disc list-inside"><li>${line.trim().substring(2)}</li></ul></li>`);
     }
@@ -99,6 +99,7 @@ const parseMarkdown = (text: string) => {
 
   return { __html: htmlElements.join('') };
 };
+
 
 const AI = () => {
   const [messages, setMessages] = useState([
@@ -219,7 +220,8 @@ const AI = () => {
   const hasUserMessages = messages.some(msg => msg.type === 'user');
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    // CHANGE 1: Use h-screen instead of min-h-screen to fix the height and prevent scrolling
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
       {/* Sidebar */}
       <ChatHistorySidebar currentChatSummary={currentChatSummary} />
       
@@ -240,11 +242,11 @@ const AI = () => {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col overflow-hidden"> {/* Added overflow-hidden */}
           {!hasUserMessages ? (
             /* Welcome Screen */
-            <div className="flex-1 flex flex-col items-center justify-center p-8">
-              <div className="text-center mb-8">
+            <div className="flex-1 flex flex-col items-center justify-center p-8 overflow-y-auto">
+              <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-gradient-to-br from-ocean-500 to-aqua-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Bot className="w-8 h-8 text-white" />
                 </div>
@@ -255,17 +257,22 @@ const AI = () => {
               </div>
 
               {/* Quick Actions Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl w-full">
+              {/* CHANGE 2: Made the grid container smaller and reduced the gap */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-w-3xl w-full">
                 {quickActions.map((action, index) => (
                   <button
                     key={index}
                     onClick={() => handleQuickAction(action.query)}
-                    className={`p-6 rounded-xl border-2 transition-all duration-200 text-left hover:shadow-md ${action.color}`}
+                    // CHANGE 3: Reduced padding, border width, and added flex layout for better alignment
+                    className={`p-4 rounded-xl border transition-all duration-200 text-left hover:shadow-md flex flex-col ${action.color}`}
                   >
-                    <action.icon className="w-8 h-8 mb-3" />
-                    <h3 className="font-semibold mb-2">{action.label}</h3>
-                    <p className="text-sm opacity-75">
-                      {action.query.length > 50 ? action.query.slice(0, 50) + '...' : action.query}
+                    {/* CHANGE 4: Made the icon smaller */}
+                    <action.icon className="w-6 h-6 mb-2" />
+                    {/* CHANGE 5: Made the label text slightly smaller */}
+                    <h3 className="font-semibold text-sm mb-1">{action.label}</h3>
+                    {/* CHANGE 6: Made the description text smaller */}
+                    <p className="text-xs opacity-75">
+                      {action.query}
                     </p>
                   </button>
                 ))}
@@ -343,8 +350,9 @@ const AI = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask me about marine data, species identification, or ocean insights..."
+                  // CHANGE 7: Reduced rows to make the input area shorter
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:border-transparent resize-none"
-                  rows={3}
+                  rows={2}
                 />
               </div>
               <button
