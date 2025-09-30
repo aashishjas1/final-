@@ -1,39 +1,78 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Globe, Fish, Dna, Search, Map, Database, BookOpen, Users } from 'lucide-react';
+import { ArrowRight, Globe, Fish, Dna, Search, Map, Database, BookOpen, Users, Star } from 'lucide-react';
 
 // Video Component for the Hero Section
 const HeroVideoBackground = () => (
   <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
     <video
       className="min-w-full min-h-full absolute object-cover"
-      src="https://www.pexels.com/download/video/18304134/" // <-- The new video URL is here
+      src="https://www.pexels.com/download/video/18304134/"
       autoPlay
       muted
       loop
+      playsInline 
     />
     <div className="absolute inset-0 bg-black opacity-50"></div>
   </div>
 );
 
-// Scientist Card Component
-const ScientistCard = ({ icon, name, institution, field, points, color }) => (
-  <div className="bg-white border border-slate-200 rounded-lg p-6 text-center transition-all duration-300 hover:border-slate-400 hover:shadow-lg">
-    <div className={`w-20 h-20 bg-${color}-100 rounded-full mx-auto mb-5 flex items-center justify-center`}>
-      {icon}
+// Scientist Card Component (Redesigned)
+const ScientistCard = ({ imageUrl, name, institution, field, experience, impactScore }) => (
+  <div className="relative bg-black rounded-xl p-3 border border-slate-700 shadow-xl overflow-hidden
+              flex flex-col md:flex-row items-center justify-between text-white
+              transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl">
+    {/* Scientist Image Section */}
+    <div className="relative w-full md:w-1/3 flex justify-center p-4">
+      {imageUrl ? (
+        <img src={imageUrl} alt={name} className="w-40 h-40 object-cover rounded-lg" />
+      ) : (
+        <div className="w-40 h-40 bg-gradient-to-br from-slate-700 to-slate-900 rounded-lg flex items-center justify-center">
+            <Users className="w-16 h-16 text-slate-400 opacity-70" />
+        </div>
+      )}
     </div>
-    <h3 className="text-lg font-semibold text-slate-800">{name}</h3>
-    <p className="text-sm text-slate-500 mb-1">{institution}</p>
-    <p className={`text-xs text-${color}-600 font-semibold mb-4`}>{field}</p>
-    <div className="text-xs text-slate-500 text-left space-y-1.5">
-      {points.map((point, index) => <p key={index}>• {point}</p>)}
+
+    {/* Scientist Info Section */}
+    <div className="w-full md:w-2/3 flex flex-col justify-between p-4 space-y-2">
+      <h3 className="text-2xl font-semibold text-white mb-1 font-google-sans-code">{name}</h3>
+      <p className="text-xs text-slate-400 italic mb-2">Leading Marine Research in India</p>
+
+      <div className="space-y-1">
+        <p className="text-base text-slate-200">
+          <span className="font-medium text-slate-100">Specialization:</span> {field}
+        </p>
+        <p className="text-base text-slate-200">
+          <span className="font-medium text-slate-100">Institution:</span> {institution}
+        </p>
+      </div>
+
+      <div className="flex justify-between items-center pt-4">
+        <div className="text-xl font-bold text-white">
+          {experience}+ Years Expertise
+        </div>
+        <div className="flex items-center text-lg text-yellow-400">
+          <Star className="w-5 h-5 mr-1 fill-yellow-400" /> {impactScore}/5
+        </div>
+      </div>
+
+      <div className="flex space-x-3 mt-4">
+        <button className="flex-1 bg-gradient-to-r from-ocean-600 to-aqua-600 text-white px-5 py-2 rounded-md
+                          font-medium hover:from-ocean-500 hover:to-aqua-500 transition-all duration-300 shadow-lg">
+          View Research
+        </button>
+        <button className="flex-1 border border-slate-600 text-slate-300 px-5 py-2 rounded-md
+                          font-medium hover:border-slate-400 hover:text-white transition-all duration-300">
+          Contact
+        </button>
+      </div>
     </div>
   </div>
 );
 
 // Feature Card Component
 const FeatureCard = ({ icon, title, description }) => (
-  <div className="bg-slate-50 border border-transparent rounded-lg p-8 text-left transition-all duration-300 hover:bg-white hover:border-slate-200 hover:shadow-sm">
+  <div className="bg-white border border-slate-200 rounded-lg p-8 text-left transition-all duration-300 hover:border-slate-400 hover:shadow-md">
     <div className="mb-4">{icon}</div>
     <h3 className="text-lg font-semibold text-slate-800 mb-2 font-google-sans-code">{title}</h3>
     <p className="text-sm text-slate-600 font-zakartra-sans">{description}</p>
@@ -43,36 +82,36 @@ const FeatureCard = ({ icon, title, description }) => (
 const Home = () => {
   const scientists = [
     {
-      icon: <Users className="w-10 h-10 text-ocean-700" />,
+      imageUrl: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=600",
       name: "Dr. Rajesh Kumar",
-      institution: "CSIR-National Institute of Oceanography",
+      institution: "CSIR-NIO",
       field: "Physical Oceanography",
-      points: ["Ocean Circulation Modeling", "Climate Change Impact", "Monsoon Dynamics"],
-      color: "ocean",
+      experience: 22,
+      impactScore: 4.9,
     },
     {
-      icon: <Fish className="w-10 h-10 text-aqua-700" />,
+      imageUrl: "https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=600",
       name: "Dr. Priya Nair",
-      institution: "Central Marine Fisheries Research Institute",
+      institution: "CMFRI",
       field: "Marine Biology & Fisheries",
-      points: ["Fish Stock Assessment", "Biodiversity Conservation", "Sustainable Fisheries"],
-      color: "aqua",
+      experience: 18,
+      impactScore: 4.8,
     },
     {
-      icon: <Dna className="w-10 h-10 text-deepBlue-700" />,
+      imageUrl: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600",
       name: "Dr. Arjun Menon",
       institution: "Indian Institute of Science",
       field: "Marine Biotechnology",
-      points: ["Environmental DNA", "Marine Genomics", "Coral Reef Genetics"],
-      color: "deepBlue",
+      experience: 15,
+      impactScore: 4.7,
     },
     {
-      icon: <Globe className="w-10 h-10 text-seafoam-700" />,
+      imageUrl: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=600",
       name: "Dr. Kavitha Reddy",
       institution: "National Centre for Coastal Research",
       field: "Coastal & Marine Geology",
-      points: ["Coastal Erosion Studies", "Sediment Analysis", "Sea Level Rise Research"],
-      color: "seafoam",
+      experience: 20,
+      impactScore: 4.9,
     },
   ];
 
@@ -95,32 +134,61 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Our Vision Section */}
+      {/* Our Vision Section - Alternating Layout */}
       <section className="py-28 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="text-left max-w-2xl mb-16">
+          <div className="text-left max-w-2xl mb-20">
             <h2 className="text-4xl font-bold text-slate-900 mb-4 font-google-sans-code">A Unified Vision for Marine Intelligence</h2>
             <p className="text-lg text-slate-600 font-zakartra-sans">
               We centralize critical marine data streams into one intelligent platform, empowering researchers and policymakers with actionable insights for conservation and sustainable resource management.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-left">
-              <Globe className="w-10 h-10 text-ocean-600 mb-5" />
-              <h3 className="text-xl font-semibold text-slate-800 mb-3 font-google-sans-code">Oceanographic Data</h3>
-              <p className="text-slate-600 font-zakartra-sans">Analyze currents, salinity, and climate patterns for a comprehensive marine overview.</p>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
+            <div className="order-2 md:order-1 text-left">
+              <Globe className="w-12 h-12 text-ocean-600 mb-6" />
+              <h3 className="text-3xl font-semibold text-slate-800 mb-4 font-google-sans-code">Oceanographic Data</h3>
+              <p className="text-lg text-slate-600 leading-relaxed font-zakartra-sans">
+                Explore vast datasets on ocean currents, salinity levels, temperature, and dynamic climate patterns. Our AI analyzes these complex interactions to provide a holistic understanding of marine physics and chemistry.
+              </p>
             </div>
-            <div className="text-left">
-              <Fish className="w-10 h-10 text-aqua-600 mb-5" />
-              <h3 className="text-xl font-semibold text-slate-800 mb-3 font-google-sans-code">Fisheries Data</h3>
-              <p className="text-slate-600 font-zakartra-sans">Monitor stock health, track catch trends, and promote sustainable fishing practices.</p>
-            </div>
-            <div className="text-left">
-              <Dna className="w-10 h-10 text-deepBlue-600 mb-5" />
-              <h3 className="text-xl font-semibold text-slate-800 mb-3 font-google-sans-code">Biodiversity Data</h3>
-              <p className="text-slate-600 font-zakartra-sans">Leverage eDNA, taxonomy, and habitat mapping to protect marine ecosystems.</p>
+            <div className="order-1 md:order-2 flex justify-center items-center">
+              <div className="bg-ocean-100 rounded-xl p-8 shadow-lg w-full max-w-md h-64 flex items-center justify-center">
+                <p className="text-ocean-700 text-xl font-medium">Conceptual Ocean Map</p>
+              </div>
             </div>
           </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
+            <div className="order-1 md:order-1 flex justify-center items-center">
+              <div className="bg-aqua-100 rounded-xl p-8 shadow-lg w-full max-w-md h-64 flex items-center justify-center">
+                <p className="text-aqua-700 text-xl font-medium">Fisheries Chart/Graph</p>
+              </div>
+            </div>
+            <div className="order-2 md:order-2 text-left">
+              <Fish className="w-12 h-12 text-aqua-600 mb-6" />
+              <h3 className="text-3xl font-semibold text-slate-800 mb-4 font-google-sans-code">Fisheries Data Analytics</h3>
+              <p className="text-lg text-slate-600 leading-relaxed font-zakartra-sans">
+                Gain deep insights into fish stock health, analyze catch trends, and model sustainable fishing practices. Our platform helps ensure the longevity of marine populations and livelihoods.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="order-2 md:order-1 text-left">
+              <Dna className="w-12 h-12 text-deepBlue-600 mb-6" />
+              <h3 className="text-3xl font-semibold text-slate-800 mb-4 font-google-sans-code">Biodiversity & eDNA Insights</h3>
+              <p className="text-lg text-slate-600 leading-relaxed font-zakartra-sans">
+                Uncover the secrets of marine life through environmental DNA (eDNA) analysis, comprehensive species taxonomy, and dynamic biodiversity mapping. Protect and understand the rich tapestry of ocean ecosystems.
+              </p>
+            </div>
+            <div className="order-1 md:order-2 flex justify-center items-center">
+              <div className="bg-deepBlue-100 rounded-xl p-8 shadow-lg w-full max-w-md h-64 flex items-center justify-center">
+                <p className="text-deepBlue-700 text-xl font-medium">eDNA Visualization</p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -133,7 +201,7 @@ const Home = () => {
               Our platform is guided by the expertise of leading researchers from India's premier institutions.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-10">
             {scientists.map((scientist, index) => (
               <ScientistCard key={index} {...scientist} />
             ))}
