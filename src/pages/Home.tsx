@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Globe, Fish, Dna, Search, Map, Database, BookOpen, Star, MessageSquare } from 'lucide-react';
+import { ArrowRight, Globe, Fish, Dna, Search, Map, Database, BookOpen, Star, Briefcase } from 'lucide-react';
 
 // Video Component for the Hero Section
 const HeroVideoBackground = () => (
@@ -17,45 +17,53 @@ const HeroVideoBackground = () => (
   </div>
 );
 
-// Scientist Card Component (Redesigned)
-const ScientistCard = ({ imageUrl, name, institution, field, experience, impactScore }) => (
-  <div className="bg-white rounded-2xl p-6 shadow-lg border border-slate-200/80
-              transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-    <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left md:space-x-6">
-      <img src={imageUrl} alt={name} className="w-32 h-32 object-cover rounded-full border-4 border-white shadow-md" />
-      <div className="mt-4 md:mt-0 flex-1">
+// Scientist Card Component (NEW AESTHETIC DESIGN)
+const ScientistCard = ({ imageUrl, name, institution, field, experience, impactScore, bio, color }) => (
+  <div className="group relative bg-white rounded-xl shadow-md border border-slate-200/80
+              transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex overflow-hidden">
+    {/* Left Side: Image */}
+    <div className="relative w-1/3 overflow-hidden">
+      <img src={imageUrl} alt={name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+    </div>
+
+    {/* Right Side: Information */}
+    <div className="w-2/3 p-6 flex flex-col">
+      <div>
+        <div className={`inline-block bg-${color}-100 text-${color}-800 text-xs font-semibold px-3 py-1 rounded-full mb-2`}>
+          {field}
+        </div>
         <h3 className="text-2xl font-bold text-slate-800 font-google-sans-code">{name}</h3>
-        <p className="text-ocean-600 font-semibold mt-1">{field}</p>
-        <p className="text-slate-500 text-sm mt-2">{institution}</p>
+        <p className="text-slate-500 text-sm mt-1">{institution}</p>
         
-        <div className="flex justify-center md:justify-start items-center space-x-6 mt-4 text-slate-600">
-          <div className="text-center">
-            <p className="text-xl font-bold">{experience}+</p>
-            <p className="text-xs">Years Exp.</p>
+        <div className="flex items-center space-x-5 mt-4 text-slate-600">
+          <div className="flex items-center space-x-1.5 text-sm">
+            <Briefcase className="w-4 h-4" />
+            <span>{experience}+ Years</span>
           </div>
-          <div className="text-center">
-            <div className="flex items-center text-xl font-bold">
-              {impactScore} <Star className="w-4 h-4 ml-1 text-yellow-400 fill-yellow-400" />
-            </div>
-            <p className="text-xs">Impact Score</p>
+          <div className="flex items-center space-x-1.5 text-sm">
+            <Star className="w-4 h-4 text-yellow-500 fill-yellow-400" />
+            <span>{impactScore} Impact</span>
           </div>
         </div>
+        
+        <p className="text-sm text-slate-600 mt-4 border-t border-slate-200 pt-4 font-zakartra-sans">
+          {bio}
+        </p>
       </div>
-    </div>
-    <div className="mt-6 border-t border-slate-200 pt-4 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-        <button className="flex-1 bg-gradient-to-r from-ocean-500 to-aqua-500 text-white px-5 py-2.5 rounded-lg
-                          font-semibold hover:shadow-lg transition-all duration-300">
+
+      <div className="mt-auto pt-6 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+        <button className={`flex-1 bg-${color}-500 text-white px-5 py-2.5 rounded-lg
+                          font-semibold hover:bg-${color}-600 transition-all duration-300 shadow-sm`}>
           View Research
         </button>
-        <button className="flex-1 flex items-center justify-center space-x-2 border border-slate-300 text-slate-700 px-5 py-2.5 rounded-lg
+        <button className="flex-1 border border-slate-300 text-slate-700 px-5 py-2.5 rounded-lg
                           font-semibold hover:bg-slate-100 transition-all duration-300">
-          <MessageSquare className="w-4 h-4" />
-          <span>Contact</span>
+          Contact
         </button>
       </div>
+    </div>
   </div>
 );
-
 
 // Feature Card Component
 const FeatureCard = ({ icon, title, description }) => (
@@ -78,10 +86,7 @@ const InfoSection = ({ icon, title, text, imageUrl, imageAlt, reverse = false })
         </p>
       </div>
       <div className={`flex items-center justify-center ${reverse ? 'md:col-start-1' : ''}`}>
-        <div className="bg-slate-100 rounded-2xl w-full h-80 shadow-lg flex items-center justify-center text-slate-400">
-          {/* In a real application, you'd use an <img src={imageUrl} alt={imageAlt} /> here */}
-          {imageAlt}
-        </div>
+        <img src={imageUrl} alt={imageAlt} className="w-full h-96 object-cover rounded-2xl shadow-lg" />
       </div>
     </div>
   </section>
@@ -97,6 +102,8 @@ const Home = () => {
       field: "Physical Oceanography",
       experience: 22,
       impactScore: 4.9,
+      bio: "Pioneering research in Indian Ocean monsoon dynamics and climate modeling.",
+      color: "ocean",
     },
     {
       imageUrl: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -105,6 +112,8 @@ const Home = () => {
       field: "Marine Biology & Fisheries",
       experience: 18,
       impactScore: 4.8,
+      bio: "Expert in tropical fisheries management and marine biodiversity conservation.",
+      color: "aqua",
     },
   ];
 
@@ -142,14 +151,16 @@ const Home = () => {
           icon={<Globe className="w-12 h-12 text-ocean-600" />}
           title="Oceanographic Data"
           text="Analyze currents, salinity, and climate patterns for a comprehensive marine overview. Our AI models identify trends and anomalies in physical and chemical ocean properties to predict environmental changes."
-          imageAlt="[High-resolution 3D ocean current visualization]"
+          imageUrl="https://images.pexels.com/photos/3410956/pexels-photo-3410956.jpeg"
+          imageAlt="Vibrant coral reef"
         />
 
         <InfoSection 
           icon={<Fish className="w-12 h-12 text-aqua-600" />}
           title="Fisheries Data Analytics"
           text="Monitor stock health, track catch trends, and model sustainable fishing practices. The platform integrates historical and real-time data to help ensure the longevity of marine populations and support coastal livelihoods."
-          imageAlt="[Interactive dashboard showing fish population trends]"
+          imageUrl="https://images.pexels.com/photos/889929/pexels-photo-889929.jpeg"
+          imageAlt="School of fish swimming in the ocean"
           reverse={true}
         />
 
@@ -157,7 +168,8 @@ const Home = () => {
           icon={<Dna className="w-12 h-12 text-deepBlue-600" />}
           title="Biodiversity & eDNA Insights"
           text="Leverage environmental DNA (eDNA), species taxonomy, and habitat mapping to protect marine ecosystems. Uncover the secrets of marine life and track biodiversity with cutting-edge genomic tools."
-          imageAlt="[DNA sequencing and species distribution map]"
+          imageUrl="https://images.pexels.com/photos/18069422/pexels-photo-18069422.png"
+          imageAlt="Scientific equipment for DNA analysis"
         />
 
       </div>
