@@ -30,7 +30,7 @@ const Home = () => {
             Unifying ocean, fisheries, otolith, and DNA data for sustainable marine management 
             through advanced AI-powered analytics and visualization.
           </p>
-          <Link to="/ai" className="bg-ocean-800 text-white px-8 py-4 rounded-md font-medium text-lg glow-hover transition-all duration-200 inline-flex items-center space-x-2">
+          <Link to="/ai" className="bg-ocean-800 text-white px-8 py-4 rounded-lg font-medium text-lg glow-hover transition-all duration-200 inline-flex items-center space-x-2">
             <span>Try AI Assistant</span>
             <ArrowRight className="w-5 h-5" />
           </Link>
