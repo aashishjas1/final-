@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -12,11 +12,13 @@ import APIDocs from './pages/APIDocs';
 import AI from './pages/AI';
 
 function App() {
+  const location = useLocation();
+  const isAIPage = location.pathname === '/ai';
+
   return (
-    <Router>
-      <div className="min-h-screen bg-gradient-to-br from-ocean-50 via-sand-50 to-coral-100">
-        <Header />
-        <main>
+    <div className={isAIPage ? 'min-h-screen' : 'min-h-screen bg-gradient-to-br from-ocean-50 via-sand-50 to-coral-100'}>
+      {!isAIPage && <Header />}
+      <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/datasets" element={<Datasets />} />
@@ -28,9 +30,8 @@ function App() {
             <Route path="/ai" element={<AI />} />
           </Routes>
         </main>
-        <Footer />
-      </div>
-    </Router>
+      {!isAIPage && <Footer />}
+    </div>
   );
 }
 

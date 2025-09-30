@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { MessageCircle, Send, Bot, User, Zap, Database, Fish, Dna, Map, BarChart3 } from 'lucide-react';
+import { Send, Bot, User, Database, Fish, Dna, Map, BarChart3 } from 'lucide-react';
 import { aiService, type ChatMessage } from '../services/aiService';
+import ChatHistorySidebar from '../components/ChatHistorySidebar';
 
 // --- Advanced Helper Function to Parse Markdown ---
 const parseMarkdown = (text: string) => {
@@ -99,7 +100,6 @@ const parseMarkdown = (text: string) => {
   return { __html: htmlElements.join('') };
 };
 
-
 const AI = () => {
   const [messages, setMessages] = useState([
     {
@@ -114,12 +114,40 @@ const AI = () => {
   const [error, setError] = useState<string | null>(null);
 
   const quickActions = [
-    { icon: Database, label: 'Find Datasets', query: 'Show me available marine datasets' },
-    { icon: Fish, label: 'Identify Species', query: 'Help me identify a marine species' },
-    { icon: Dna, label: 'Analyze eDNA', query: 'Explain eDNA analysis results' },
-    { icon: Map, label: 'Ocean Mapping', query: 'Show me ocean temperature patterns' },
-    { icon: BarChart3, label: 'Generate a Table', query: 'Generate a sample table of fish populations in the Indian Ocean' }
+    { 
+      icon: Database, 
+      label: 'Find Datasets', 
+      query: 'Show me available marine datasets',
+      color: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+    },
+    { 
+      icon: Fish, 
+      label: 'Identify Species', 
+      query: 'Help me identify a marine species',
+      color: 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
+    },
+    { 
+      icon: Dna, 
+      label: 'Analyze eDNA', 
+      query: 'Explain eDNA analysis results',
+      color: 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100'
+    },
+    { 
+      icon: Map, 
+      label: 'Ocean Mapping', 
+      query: 'Show me ocean temperature patterns',
+      color: 'bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100'
+    },
+    { 
+      icon: BarChart3, 
+      label: 'Generate a Table', 
+      query: 'Generate a sample table of fish populations in the Indian Ocean',
+      color: 'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100'
+    }
   ];
+
+  // Get current chat summary for sidebar
+  const currentChatSummary = messages.find(msg => msg.type === 'user')?.content.slice(0, 50) + '...' || '';
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -188,127 +216,146 @@ const AI = () => {
     }
   };
 
+  const hasUserMessages = messages.some(msg => msg.type === 'user');
+
   return (
-    <div className="py-12 px-6 min-h-screen">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-semibold text-ocean-800 mb-4 animate-float">Shark AI Assistant</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Your intelligent companion for marine data analysis and ocean insights
-          </p>
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      <ChatHistorySidebar currentChatSummary={currentChatSummary} />
+      
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col bg-white rounded-l-2xl shadow-xl overflow-hidden">
+        {/* Header */}
+        <div className="border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-gray-900">AI Chat</h1>
+              <p className="text-sm text-gray-500">Marine data analysis and insights</p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+              <span className="text-sm text-gray-500">Online</span>
+            </div>
+          </div>
         </div>
 
-        <div className="glass rounded-2xl overflow-hidden glow-soft">
-          <div className="glass-ocean text-white p-4 flex items-center space-x-3 border-b border-white/20">
-            <Bot className="w-6 h-6" />
-            <div classname="bg-gray-200">
-              <h2 className="font-bold">Shark AI</h2>
-              <p className="text-sm opacity-100">Marine Data Specialist</p>
-            </div>
-            <div className="ml-auto flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-sm">Online</span>
-            </div>
-          </div>
-
-          <div className="h-96 overflow-y-auto p-4 space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex items-start space-x-3 ${
-                  message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                }`}
-              >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  message.type === 'user' ? 'bg-[#3C7EDB]' : 'bg-[#30345E]'
-                }`}>
-                  {message.type === 'user' ? (
-                    <User className="w-4 h-4 text-white" />
-                  ) : (
-                    <Bot className="w-4 h-4 text-white" />
-                  )}
+        {/* Content Area */}
+        <div className="flex-1 flex flex-col">
+          {!hasUserMessages ? (
+            /* Welcome Screen */
+            <div className="flex-1 flex flex-col items-center justify-center p-8">
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-ocean-500 to-aqua-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Bot className="w-8 h-8 text-white" />
                 </div>
-                <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                  message.type === 'user'
-                    ? 'glass-coral text-gray-800 glow-coral'
-                    : 'glass-sand text-gray-800'
-                }`}>
-                  <div
-                    className="text-sm prose max-w-none"
-                    dangerouslySetInnerHTML={parseMarkdown(message.content)}
-                  />
-                  <p className={`text-xs mt-1 ${
-                    message.type === 'user' ? 'text-blue-100' : 'text-gray-500'
-                  }`}>
-                    {message.timestamp}
-                  </p>
-                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Shark AI</h2>
+                <p className="text-gray-600 max-w-md">
+                  Get comprehensive marine data analysis and ocean insights. Choose an option below to get started.
+                </p>
               </div>
-            ))}
-            
-            {isTyping && (
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 rounded-full glass-seaweed flex items-center justify-center glow-seaweed">
-                  <Bot className="w-4 h-4 text-white" />
-                </div>
-                <div className="glass-sand px-4 py-2 rounded-lg">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-seaweed-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-seaweed-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-seaweed-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+
+              {/* Quick Actions Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl w-full">
+                {quickActions.map((action, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleQuickAction(action.query)}
+                    className={`p-6 rounded-xl border-2 transition-all duration-200 text-left hover:shadow-md ${action.color}`}
+                  >
+                    <action.icon className="w-8 h-8 mb-3" />
+                    <h3 className="font-semibold mb-2">{action.label}</h3>
+                    <p className="text-sm opacity-75">
+                      {action.query.length > 50 ? action.query.slice(0, 50) + '...' : action.query}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            /* Chat Messages */
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {messages.slice(1).map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex items-start space-x-3 ${
+                    message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                    message.type === 'user' 
+                      ? 'bg-gradient-to-br from-ocean-500 to-aqua-500' 
+                      : 'bg-gray-100'
+                  }`}>
+                    {message.type === 'user' ? (
+                      <User className="w-4 h-4 text-white" />
+                    ) : (
+                      <Bot className="w-4 h-4 text-gray-600" />
+                    )}
+                  </div>
+                  <div className={`max-w-3xl px-4 py-3 rounded-2xl ${
+                    message.type === 'user'
+                      ? 'bg-gradient-to-br from-ocean-500 to-aqua-500 text-white'
+                      : 'bg-gray-50 text-gray-900'
+                  }`}>
+                    <div
+                      className="text-sm prose max-w-none"
+                      dangerouslySetInnerHTML={parseMarkdown(message.content)}
+                    />
+                    <p className={`text-xs mt-2 ${
+                      message.type === 'user' ? 'text-blue-100' : 'text-gray-500'
+                    }`}>
+                      {message.timestamp}
+                    </p>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-
-          <div className="border-t border-white/20 p-4">
-            <p className="text-sm text-gray-600 mb-3">Quick Actions:</p>
-            <div className="flex flex-wrap gap-2">
-              {quickActions.map((action, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleQuickAction(action.query)}
-                  className="bg-ocean-800 text-white px-3 py-2 rounded-lg glow-hover transition-all duration-200 flex items-center space-x-2 text-sm"
-                >
-                  <action.icon className="w-4 h-4" />
-                  <span>{action.label}</span>
-                </button>
               ))}
+              
+              {isTyping && (
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                    <Bot className="w-4 h-4 text-gray-600" />
+                  </div>
+                  <div className="bg-gray-50 px-4 py-3 rounded-2xl">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
-          <div className="border-t border-white/20 p-4">
+          {/* Input Area */}
+          <div className="border-t border-gray-200 p-6">
             {error && (
-              <div className="mb-4 p-3 glass border border-red-300 rounded-lg glow-soft">
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-red-700 text-sm">
                   <strong>Error:</strong> {error}
                 </p>
               </div>
             )}
-            <div className="flex items-center space-x-3">
-              <div className="flex-1 relative">
+            <div className="flex items-end space-x-4">
+              <div className="flex-1">
                 <textarea
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask me about marine data, species identification, or ocean insights..."
-                  className="w-full px-4 py-3 glass rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500/20 resize-none"
-                  rows="2"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:border-transparent resize-none"
+                  rows={3}
                 />
               </div>
               <button
                 onClick={handleSendMessage}
-                disabled={!inputMessage.trim()}
-                className="bg-ocean-800 text-white p-3 rounded-lg glow-hover transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!inputMessage.trim() || isTyping}
+                className="bg-gradient-to-br from-ocean-500 to-aqua-500 text-white p-3 rounded-xl hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="w-5 h-5" />
               </button>
             </div>
             <p className="text-xs text-gray-500 mt-2">
-              Powered by NVIDIA Llama-3.1-Nemotron-70B-Instruct
-            </p>
-            <p className="text-xs text-gray-700 mt-2">
               Powered by NVIDIA Llama-3.1-Nemotron-70B-Instruct
             </p>
           </div>
@@ -319,4 +366,3 @@ const AI = () => {
 };
 
 export default AI;
-
