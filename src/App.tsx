@@ -26,7 +26,7 @@ function App() {
             <Route path="/otolith" element={<Otolith />} />
             <Route path="/taxonomy" element={<Taxonomy />} />
             <Route path="/edna" element={<EDNA />} />
-            <Route path="/api" element={<APIDocs />} />
+            <Route path="/api-docs" element={<APIDocs />} />
             <Route path="/ai" element={<AI />} />
           </Routes>
         </main>

@@ -52,6 +52,11 @@ cp .env.example .env
 npm run dev
 ```
 
+6. Start the backend server (in a separate terminal):
+```bash
+node server.js
+```
+
 ## AI Assistant Configuration
 
 The AI assistant uses NVIDIA's Llama-3.1-Nemotron-70B-Instruct model for marine data analysis. To enable the AI features:
